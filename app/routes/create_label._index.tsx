@@ -28,17 +28,11 @@ export default function Index() {
 
   return (
     <div className="grid grid-cols-2 items-center justify-center gap-2 p-2">
-      <Button asChild>
-        <Link to="/create_label">Crear Etiqueta</Link>
-      </Button>
-      <Button asChild disabled>
-        <Link to="/hoja_seguimiento">Hoja seguimiento</Link>
-      </Button>
-      {/* {templateFiles.map(({ filename, name }) => (
+      {templateFiles.map(({ filename, name }) => (
         <Button key={name} asChild>
-          <Link to={`./cantidad?file=${filename}`}>{name}</Link>
+          <Link to={`./${filename}`}>{name}</Link>
         </Button>
-      ))} */}
+      ))}
     </div>
   );
 }

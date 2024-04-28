@@ -1,10 +1,18 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+
+import type { LinksFunction } from "@remix-run/node";
+import stylesheet from "~/globals.css?url";
+import Footer from "./components/footer";
+import { fetchAndExtractPrintingStatus } from "./lib/printerUtils";
+import { useSSE, SSEProvider } from "react-hooks-sse";
+import FooterLabel from "./components/FooterLabel";
+import { EventSourceProvider, useEventSource } from "remix-utils/sse/react";
+
+// const isDev = import.meta.env.ENVIRONMENT === "DEV";
+// const PRINTER_IP = import.meta.env.PRINTER_IP;
+const map = new Map();
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: stylesheet }];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,14 +24,55 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        {/* <SSEProvider endpoint="http://localhost:5173/sse/statuss"> */}
+        <EventSourceProvider value={map}>{children}</EventSourceProvider>
         <ScrollRestoration />
         <Scripts />
+        {/* </SSEProvider> */}
       </body>
     </html>
   );
 }
 
+// export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR"> {
+//   if (!isDev) {
+//     const url = `http://${PRINTER_IP}/general/monitor.html`;
+//     return await fetchAndExtractPrintingStatus(url);
+//   } else {
+//     return await fetch("http://192.168.1.200:2999/status");
+//   }
+// }
+
+// export async function loader() {
+//   return await getBrotherPrinterStatus();
+// }
+
 export default function App() {
-  return <Outlet />;
+  // const data2 = useEventSource("/sse/status", { event: "status" });
+
+  // const data = useLoaderData();
+  // const data2 = useRouteLoaderData("create_label.$file");
+  // const { revalidate } = useRevalidator();
+  // const x = useSSE("/sse/status", "ERROR", {});
+  // console.log("data2", data2);
+  // console.log("data2", x);
+
+  // console.log("data2", data2);
+
+  // useEffect(() => {
+  //   const id = setInterval(revalidate, 3000);
+  //   return () => clearInterval(id);
+  // }, [revalidate]);
+
+  // console.log(data);
+  return (
+    <>
+      {/* <h1>{data2}</h1> */}
+      <Outlet />
+      <footer className="w-full py-6 border-t space-y-3">
+        <FooterLabel nombre="Etiquetas" texto="x"></FooterLabel>
+        <Footer printer_status="READY" nombre="Papel" texto=""></Footer>
+      </footer>
+    </>
+  );
 }

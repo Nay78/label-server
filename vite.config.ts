@@ -7,4 +7,8 @@ installGlobals();
 
 export default defineConfig({
   plugins: [remix(), tsconfigPaths()],
+  ssr: {
+    noExternal: ["remix-utils"],
+    // external: ["remix-utils", "child_process"],
+  },
 });
