@@ -6,8 +6,8 @@ import { isPrinting } from "~/.server/print_label";
 
 // import { eventStream } from "remix-utils";
 // import "dotenv/config";
-
 // const isDev = import.meta.env.ENVIRONMENT === "DEV";
+
 const PRINTER_IP = import.meta.env.VITE_PRINTER_IP;
 const URL = `http://${PRINTER_IP}/general/monitor.html`;
 const POLLING = Number(import.meta.env.VITE_POLLING) || 1000;
@@ -45,11 +45,13 @@ async function checkPrinterStatus() {
 
   if (status !== last_result) {
     last_result = status;
-    if (isPrinting()) {
-      printerStatusEmitter.emit("statusChanged", "PRINTING");
-    } else {
-      printerStatusEmitter.emit("statusChanged", status);
-    }
+    printerStatusEmitter.emit("statusChanged", status);
+
+    // if (isPrinting()) {
+    //   printerStatusEmitter.emit("statusChanged", "PRINTING");
+    // } else {
+    //   printerStatusEmitter.emit("statusChanged", status);
+    // }
   }
 }
 
@@ -57,6 +59,9 @@ export async function loader({ request }: LoaderArgs) {
   console.log("request", request);
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (status: string) => {
+      if (status === "READY" && isPrinting()) {
+        return send({ event: "status", data: "PRINTING" });
+      }
       const payload = { event: "status", data: status };
       // console.log("SEND", payload);
       send(payload);

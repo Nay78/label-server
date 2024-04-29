@@ -62,7 +62,8 @@ export async function printLabel(filename: string, qty: number) {
   console.log("command", command);
 
   for (let i = 0; i < qty; i++) {
-    sendMessage(`Imprimiendo: ${i + 1}/${qty}`);
+    const msg = `Imprimiendo: ${i + 1}/${qty}`;
+    sendMessage(msg);
     await waitForReady();
     const result = await execPromise(command);
     await new Promise((resolve) => setTimeout(resolve, wait * 1000));
