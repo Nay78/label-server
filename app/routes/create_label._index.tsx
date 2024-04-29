@@ -2,13 +2,16 @@ import type { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import fs from "fs/promises";
 import { Button } from "~/components/ui/button";
+import os from "os";
 
 export const meta: MetaFunction = () => {
   return [{ title: "New Remix App" }, { name: "description", content: "Welcome to Remix!" }];
 };
 
 export async function loader() {
-  const filePath = "/home/nayguel/Templates";
+  const homeDirectory = os.homedir();
+  console.log(homeDirectory);
+  const filePath = homeDirectory + "/Templates";
   const data = await fs.readdir(filePath, "utf-8");
   const filteredFiles: string[] = data.filter((file) => file.endsWith(".odt"));
   const templateFiles: { filename: string; name: string }[] = filteredFiles.map((file) => ({
