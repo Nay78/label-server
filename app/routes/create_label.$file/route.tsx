@@ -41,15 +41,15 @@ export async function action({ request }: ActionArgs) {
   // const date = new Date(body.get("date"));
   // const today = new Date();
   // const offset = (date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
-  const formFie = body.get("file");
+  const formFile = body.get("file");
 
-  const command = `python 'app/routes/create_label.$file/label.py' create --date-offset ${formDate} ${formFie}`;
+  const command = `python 'app/routes/create_label.$file/label.py' create --date-offset ${formDate} ${formFile}`;
   if (command === LATEST_COMMAND) {
     console.log("Command already executed", command);
     return json({ command, ...response });
   }
   LATEST_COMMAND = formDate + command;
-  sendMessage(`Creando Etiqueta: ${formFie} ${formDate}`);
+  sendMessage(`Creando Etiqueta: ${formFile} ${formDate}`);
   response = await execPromise(command);
   console.log("Command executed", command, response);
 
@@ -61,14 +61,15 @@ export async function action({ request }: ActionArgs) {
 
   // print labels
   const qty = body.get("qty");
-  const printFilename = `${formFie}_${formDate}`;
+  const printFilename = `${formFile}_${formDate}`;
   // const params = new URLSearchParams({ qty, filename: printFilename });
 
   // const printLabelAction = "/print_label?" + params.toString();
   printLabel(printFilename, qty);
   // fetch("/print_label", { method: "POST", body: JSON.stringify({ qty, filename: printFilename }) });
 
-  console.log("printing2 (route.tsx)", printing);
+  sendMessage(`${qty} etiquetas impresas - ${printFilename}`);
+
   return json({ command, ...response });
 }
 

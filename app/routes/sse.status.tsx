@@ -21,7 +21,7 @@ printerStatusEmitter.on("statusChanged", () => {
     last_result
   );
 });
-// printerStatusEmitter.emit("statusChanged", "READY");
+
 let timestamp = Date.now() - POLLING;
 let last_result: "READY" | "PRINTING" | "BUSY" | "ERROR" | "SERVER_ERROR";
 
@@ -67,8 +67,8 @@ async function checkPrinterStatus() {
   // printerStatusEmitter.emit("statusChanged", status);
 
   if (status !== last_result) {
-    printerStatusEmitter.emit("statusChanged", status);
     last_result = status;
+    printerStatusEmitter.emit("statusChanged", status);
   }
 }
 
@@ -87,8 +87,9 @@ async function checkPrinterStatus() {
 export async function loader({ request }: LoaderArgs) {
   console.log("request", request);
   return eventStream(request.signal, function setup(send) {
-    const statusChangedHandler = async () => {
-      const payload = { event: "status", data: await getBrotherPrinterStatus() };
+    const statusChangedHandler = async (status: string) => {
+      const payload = { event: "status", data: status };
+      // const payload = { event: "status", data: await getBrotherPrinterStatus() };
       console.log("SEND", payload);
       send(payload);
     };
