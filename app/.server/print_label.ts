@@ -2,6 +2,7 @@ import path from "path";
 import os from "os";
 import { execPromise } from "~/.server/utils";
 import { getPrinterStatus } from "~/routes/sse.status";
+import { sendMessage } from "~/routes/sse.label_printer";
 
 export let printing = false;
 
@@ -57,6 +58,7 @@ export async function printLabel(filename: string, qty: number) {
   console.log("command", command);
 
   for (let i = 0; i < qty; i++) {
+    sendMessage(`Imprimiendo: ${i + 1}/${qty}`);
     await waitForReady();
     const result = await execPromise(command);
     await new Promise((resolve) => setTimeout(resolve, wait * 1000));

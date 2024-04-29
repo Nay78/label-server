@@ -24,22 +24,27 @@ printerStatusEmitter.on("statusChanged", () => {
 });
 // printerStatusEmitter.emit("statusChanged", "READY");
 let timestamp = Date.now() - POLLING;
-let last_result: "READY" | "PRINTING" | "BUSY" | "ERROR" = "ERROR";
+let last_result: "READY" | "PRINTING" | "BUSY" | "ERROR" | "SERVER_ERROR";
 
 export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR" | "SERVER_ERROR"> {
-  if (Date.now() - timestamp < POLLING) {
+  if (last_result && Date.now() - timestamp < POLLING) {
     return last_result;
   }
-  if (isDev) {
-    const response = await fetch("http://192.168.1.200:2999/status");
-    last_result = await response.text();
-    timestamp = Date.now();
-    return last_result;
-  } else {
-    last_result = await fetchAndExtractPrintingStatus(URL);
-    timestamp = Date.now();
-    return last_result;
-  }
+  // let result;
+  const result = await fetchAndExtractPrintingStatus(URL);
+  timestamp = Date.now();
+  return result;
+
+  // if (isDev) {
+  //   const response = await fetch("http://192.168.1.200:2999/status");
+  //   result = await response.text();
+  //   timestamp = Date.now();
+  //   return result;
+  // } else {
+  //   result = await fetchAndExtractPrintingStatus(URL);
+  //   timestamp = Date.now();
+  //   return result;
+  // }
 }
 
 export function getPrinterStatus() {

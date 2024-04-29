@@ -10,6 +10,7 @@ import { useState } from "react";
 import { execPromise } from "~/.server/utils";
 import { printing, printLabel } from "~/.server/print_label";
 import { useEventSource } from "remix-utils/sse/react";
+import { sendMessage } from "../sse.label_printer";
 
 let LATEST_COMMAND = "";
 
@@ -48,6 +49,7 @@ export async function action({ request }: ActionArgs) {
     return json({ command, ...response });
   }
   LATEST_COMMAND = formDate + command;
+  sendMessage(`Creando Etiqueta: ${formFie} ${formDate}`);
   response = await execPromise(command);
   console.log("Command executed", command, response);
 
@@ -74,6 +76,7 @@ export default function Index() {
   // const data = useLoaderData<typeof loader>();
   // const form = useForm();
   const data = useEventSource("/sse/status", { event: "status" });
+  const lblprinter = useEventSource("/sse/label_printer", { event: "message" });
   const [qty, setQty] = useState(1); // Initial value is 1
   const today = new Date().toISOString().split("T")[0];
   const { file } = useParams();
@@ -138,7 +141,7 @@ export default function Index() {
   return (
     <div className="flex flex-col p-6">
       {/* <h1 className="bg-black text-white">{data.status}</h1> */}
-      {canPrint ? form : <Label>Impresora ocupada</Label>}
+      {canPrint ? form : <Label>{lblprinter}</Label>}
     </div>
   );
 }
