@@ -7,7 +7,6 @@ import { EventEmitter } from "events";
 // import "dotenv/config";
 
 // const isDev = import.meta.env.ENVIRONMENT === "DEV";
-const isDev = "false";
 const PRINTER_IP = import.meta.env.VITE_PRINTER_IP;
 const URL = `http://${PRINTER_IP}/general/monitor.html`;
 const POLLING = Number(import.meta.env.VITE_POLLING) || 1000;

@@ -114,10 +114,10 @@ export default function Index() {
                 variant={"default"}
                 type="button"
                 onClick={() => {
-                  setQty(119);
+                  setQty(123);
                 }}
               >
-                119
+                123
               </Button>
             </div>
           </div>
@@ -141,7 +141,13 @@ export default function Index() {
   return (
     <div className="flex flex-col p-6">
       {/* <h1 className="bg-black text-white">{data.status}</h1> */}
-      {canPrint ? form : <Label>{lblprinter}</Label>}
+      {canPrint ? (
+        form
+      ) : (
+        <div className="flex justify-center items-center">
+          <Label>{lblprinter}</Label>
+        </div>
+      )}
     </div>
   );
 }
