@@ -41,6 +41,10 @@ export async function loader() {
   return { printing };
 }
 
+export function isPrinting() {
+  return printing;
+}
+
 export async function printLabel(filename: string, qty: number) {
   console.log("print_label called");
 

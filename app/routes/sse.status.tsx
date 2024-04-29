@@ -2,6 +2,7 @@
 import { eventStream } from "remix-utils/sse/server";
 import { fetchAndExtractPrintingStatus } from "~/lib/printerUtils";
 import { EventEmitter } from "events";
+import { isPrinting } from "~/.server/print_label";
 
 // import { eventStream } from "remix-utils";
 // import "dotenv/config";
@@ -33,17 +34,6 @@ export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | 
   const result = await fetchAndExtractPrintingStatus(URL);
   timestamp = Date.now();
   return result;
-
-  // if (isDev) {
-  //   const response = await fetch("http://192.168.1.200:2999/status");
-  //   result = await response.text();
-  //   timestamp = Date.now();
-  //   return result;
-  // } else {
-  //   result = await fetchAndExtractPrintingStatus(URL);
-  //   timestamp = Date.now();
-  //   return result;
-  // }
 }
 
 export function getPrinterStatus() {
@@ -51,46 +41,24 @@ export function getPrinterStatus() {
 }
 
 async function checkPrinterStatus() {
-  // let status;
-  // try {
-  //   status = await getBrotherPrinterStatus();
-  //   console.log("getBrotherPrinterStatus", status);
-  // } catch (error) {
-  //   console.log("getBrotherPrinterStatus ERROR", error);
-  //   status = "SERVER_ERROR";
-  // }
   const status = await getBrotherPrinterStatus();
-  // console.log("PRINTER STATUS", status);
-
-  // If the status has changed since the last check, emit a 'statusChanged' event
-  // printerStatusEmitter.emit("statusChanged", status);
-  // printerStatusEmitter.emit("statusChanged", status);
 
   if (status !== last_result) {
     last_result = status;
-    printerStatusEmitter.emit("statusChanged", status);
+    if (isPrinting()) {
+      printerStatusEmitter.emit("statusChanged", "PRINTING");
+    } else {
+      printerStatusEmitter.emit("statusChanged", status);
+    }
   }
 }
-
-// export async function loader({ request }: LoaderArgs) {
-//   return eventStream(request.signal, function setup(send) {
-//     const timer = setInterval(async () => {
-//       send({ data: await getBrotherPrinterStatus() });
-//     }, 2000);
-
-//     return function clear() {
-//       clearInterval(timer);
-//     };
-//   });
-// }
 
 export async function loader({ request }: LoaderArgs) {
   console.log("request", request);
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (status: string) => {
       const payload = { event: "status", data: status };
-      // const payload = { event: "status", data: await getBrotherPrinterStatus() };
-      console.log("SEND", payload);
+      // console.log("SEND", payload);
       send(payload);
     };
 
