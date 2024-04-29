@@ -8,8 +8,6 @@ import { useSSE, SSEProvider } from "react-hooks-sse";
 import FooterLabel from "./components/FooterLabel";
 import { EventSourceProvider, useEventSource } from "remix-utils/sse/react";
 
-// const isDev = import.meta.env.ENVIRONMENT === "DEV";
-// const PRINTER_IP = import.meta.env.PRINTER_IP;
 const map = new Map();
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: stylesheet }];

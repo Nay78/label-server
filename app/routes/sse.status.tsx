@@ -1,15 +1,16 @@
 // app/routes/sse.time.ts
-import type { LoaderArgs } from "@remix-run/node";
 import { eventStream } from "remix-utils/sse/server";
 import { fetchAndExtractPrintingStatus } from "~/lib/printerUtils";
 import { EventEmitter } from "events";
 
 // import { eventStream } from "remix-utils";
+// import "dotenv/config";
 
-const isDev = process.env.ENVIRONMENT === "DEV";
-const PRINTER_IP = process.env.PRINTER_IP;
+// const isDev = import.meta.env.ENVIRONMENT === "DEV";
+const isDev = "false";
+const PRINTER_IP = import.meta.env.VITE_PRINTER_IP;
 const URL = `http://${PRINTER_IP}/general/monitor.html`;
-const POLLING = Number(process.env.POLLING) || 1000;
+const POLLING = Number(import.meta.env.VITE_POLLING) || 1000;
 
 const printerStatusEmitter = new EventEmitter();
 printerStatusEmitter.on("statusChanged", () => {
@@ -39,6 +40,10 @@ export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | 
     timestamp = Date.now();
     return last_result;
   }
+}
+
+export function getPrinterStatus() {
+  return last_result;
 }
 
 async function checkPrinterStatus() {
