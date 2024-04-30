@@ -130,6 +130,7 @@ export default function Index() {
                   onClick={() => {
                     setQty(qty + 10);
                   }}
+                  className="h-10"
                 >
                   +10
                 </Button>

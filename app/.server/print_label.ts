@@ -42,6 +42,7 @@ export async function loader() {
 }
 
 export function isPrinting() {
+  console.log("isPrinting called", printing);
   return printing;
 }
 
