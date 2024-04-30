@@ -8,11 +8,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "~/components/ui/label";
 import { useLayoutEffect, useState } from "react";
 import { execPromise } from "~/.server/utils";
-import { printing, printLabel } from "~/.server/print_label";
 import { useEventSource } from "remix-utils/sse/react";
 import { sendMessage } from "../sse.label_printer";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { setBusy } from "~/.server/serverBusy";
+import { printLabel } from "~/.server/printLabel";
 
 let LATEST_COMMAND = "";
 
@@ -28,7 +28,6 @@ export async function loader({ params }) {
 
 // Action to handle form submission
 export async function action({ request }: ActionArgs) {
-  console.log("printing1 (route.tsx)", printing);
   setBusy(true);
   // Get the form data from the request
   let response = {};
