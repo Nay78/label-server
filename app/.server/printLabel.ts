@@ -5,7 +5,7 @@ import { getPrinterStatus } from "~/routes/sse.status";
 import { sendMessage } from "~/routes/sse.label_printer";
 import { isBusy, setBusy } from "./serverBusy";
 
-// export let printing = false;
+export let printing = false;
 
 const BROTHER_QL_PATH = import.meta.env.VITE_BROTHER_QL_PATH;
 const PRINTER_ADDRESS = import.meta.env.VITE_PRINTER_ADDRESS;
@@ -32,9 +32,10 @@ async function waitForReady(polling = 500) {
 export async function printLabel(filename: string, qty: number) {
   console.log("print_label called");
 
-  if (isBusy()) {
-    return { printing: true, output: "Server busy" };
+  if (printing) {
+    return { printing: true, output: "Already printing" };
   }
+  printing = true;
   setBusy(true);
   // const filename = body.get("filename");
   // const qty = body.get("qty");
@@ -55,6 +56,7 @@ export async function printLabel(filename: string, qty: number) {
   }
 
   sendMessage(`Etiqueta ${filename} impresa ${qty} veces`);
+  printing = false;
   setBusy(false);
   return { command, printing: false, output: "success" };
 }
