@@ -71,6 +71,7 @@ export async function printLabel(filename: string, qty: number) {
   }
 
   printing = false;
+  sendMessage(`Etiqueta ${filename} impresa ${qty} veces`);
   return { command, printing, output: "success" };
 }
 
@@ -106,5 +107,6 @@ export async function action({ request }: ActionArgs) {
   }
 
   printing = false;
+  sendMessage(`Etiqueta ${filename} impresa ${qty} veces`);
   return { command, printing, output: "success" };
 }

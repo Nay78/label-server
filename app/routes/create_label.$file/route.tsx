@@ -69,7 +69,7 @@ export async function action({ request }: ActionArgs) {
   printLabel(printFilename, qty);
   // fetch("/print_label", { method: "POST", body: JSON.stringify({ qty, filename: printFilename }) });
 
-  sendMessage(`${qty} etiquetas impresas - ${printFilename}`);
+  // sendMessage(`${qty} etiquetas impresas - ${printFilename}`);
 
   return json({ command, ...response });
 }

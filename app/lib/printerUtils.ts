@@ -14,8 +14,19 @@ export async function fetchAndExtractPrintingStatus(url: string): Promise<"READY
   // console.log("Response text:", responseText);
 
   // Parse the XML response
-  const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(responseText, "text/xml");
+  const parser = new DOMParser({
+    locator: {},
+    errorHandler: {
+      warning: function (w) {},
+      error: function (e) {},
+      fatalError: function (e) {
+        // console.error(e);
+      },
+    },
+  });
+  // const parser = new DOMParser();
+
+  const xmlDoc = parser.parseFromString(responseText, "text/html");
 
   // Check for parse errors
   const parseErrors = xmlDoc.getElementsByTagName("parsererror");
