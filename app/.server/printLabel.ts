@@ -6,6 +6,7 @@ import { sendMessage } from "~/routes/sse.label_printer";
 import { isBusy, setBusy } from "./serverBusy";
 
 export let printing = false;
+let printerError = false;
 
 const BROTHER_QL_PATH = import.meta.env.VITE_BROTHER_QL_PATH;
 const PRINTER_ADDRESS = import.meta.env.VITE_PRINTER_ADDRESS;
@@ -14,15 +15,30 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function onPrinterError() {
+  setBusy(true, true);
+  sendMessage("CAMBIAR ROLLO DE PAPEL");
+  printerError = true;
+}
+
+function releasePrinterError() {
+  printerError = false;
+  setBusy(true);
+}
+
 async function waitForReady(polling = 500) {
   return new Promise((resolve, reject) => {
     const intervalId = setInterval(async () => {
       const status = getPrinterStatus();
 
       if (status === "ERROR") {
-        await sleep(1000);
+        if (!printerError) {
+          onPrinterError();
+        }
+        await sleep(100);
       } else if (status === "READY") {
         clearInterval(intervalId);
+        releasePrinterError();
         resolve(void 0);
       }
     }, polling);

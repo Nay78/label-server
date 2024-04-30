@@ -2,7 +2,7 @@ let serverBusy = false;
 let timeoutId: NodeJS.Timeout | null = null;
 const timeout = 60 * 1000;
 
-export function setBusy(busy: boolean) {
+export function setBusy(busy: boolean, AVOID_TIMEOUT = false) {
   //   if (busy === serverBusy) {
   //     return;
   //   }
@@ -16,7 +16,7 @@ export function setBusy(busy: boolean) {
   }
 
   // If the server is busy, schedule a function to set serverBusy to false after 1 minute
-  if (busy) {
+  if (!AVOID_TIMEOUT && busy) {
     timeoutId = setTimeout(() => {
       serverBusy = false;
     }, timeout);
