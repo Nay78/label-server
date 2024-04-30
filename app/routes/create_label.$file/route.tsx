@@ -67,6 +67,13 @@ export async function action({ request }: ActionArgs) {
   const qty = body.get("qty");
   const printFilename = `${formFile}_${formDate}`;
   printLabel(printFilename, qty);
+
+  // wait for 3 seconds to avoid client sending another request
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Promise resolved");
+    }, 3000);
+  });
   return json({ command, ...response });
 }
 
