@@ -9,6 +9,7 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 startTransition(() => {
+  document.body.style.zoom = "125%";
   hydrateRoot(
     document,
     <StrictMode>

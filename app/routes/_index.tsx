@@ -9,7 +9,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="grid grid-cols-2 items-center justify-center gap-2 p-2">
-      <Button asChild>
+      <Button asChild className="">
         <Link to="/create_label">Crear Etiqueta</Link>
       </Button>
       <Button asChild disabled>
