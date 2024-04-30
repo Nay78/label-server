@@ -11,11 +11,11 @@ export default defineConfig({
   plugins: [remix(), tsconfigPaths()],
   ssr: {
     noExternal: ["remix-utils"],
-    // external: ["remix-utils", "child_process"],
+    external: ["@uidotdev/usehooks"],
   },
   build: {
     rollupOptions: {
-      external: ["fs/promises", "child_process"],
+      external: ["fs/promises", "child_process", "@uidotdev/usehooks"],
     },
   },
 });

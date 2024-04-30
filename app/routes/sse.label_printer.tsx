@@ -42,3 +42,5 @@ export async function loader({ request }) {
     };
   });
 }
+
+sendMessage("Ready");

@@ -9,7 +9,7 @@ import { useEventSource } from "remix-utils/sse/react";
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 export default function FooterLabel() {
-  const data = useEventSource("/sse/status", { event: "status" });
+  const data = useEventSource("/sse/status", { event: "status" }) || "...";
   const messages = useEventSource("/sse/label_printer", { event: "message" });
 
   const printer_status = data || "ERROR";

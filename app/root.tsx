@@ -6,7 +6,7 @@ import Footer from "./components/footer";
 import { fetchAndExtractPrintingStatus } from "./lib/printerUtils";
 import { useSSE, SSEProvider } from "react-hooks-sse";
 import FooterLabel from "./components/FooterLabel";
-import { EventSourceProvider, useEventSource } from "remix-utils/sse/react";
+import { EventSourceProvider } from "remix-utils/sse/react";
 
 const map = new Map();
 
@@ -22,11 +22,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {/* <SSEProvider endpoint="http://localhost:5173/sse/statuss"> */}
         <EventSourceProvider value={map}>{children}</EventSourceProvider>
         <ScrollRestoration />
         <Scripts />
-        {/* </SSEProvider> */}
       </body>
     </html>
   );
@@ -68,7 +66,7 @@ export default function App() {
       {/* <h1>{data2}</h1> */}
       <Outlet />
       <footer className="w-full py-6 border-t space-y-3">
-        <FooterLabel nombre="Etiquetas" texto="x"></FooterLabel>
+        <FooterLabel></FooterLabel>
         <Footer printer_status="READY" nombre="Papel" texto=""></Footer>
       </footer>
     </>

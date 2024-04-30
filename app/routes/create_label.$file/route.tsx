@@ -6,11 +6,12 @@ import { Button } from "~/components/ui/button";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { execPromise } from "~/.server/utils";
 import { printing, printLabel } from "~/.server/print_label";
 import { useEventSource } from "remix-utils/sse/react";
 import { sendMessage } from "../sse.label_printer";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 let LATEST_COMMAND = "";
 
@@ -76,12 +77,22 @@ export async function action({ request }: ActionArgs) {
 export default function Index() {
   // const data = useLoaderData<typeof loader>();
   // const form = useForm();
-  const data = useEventSource("/sse/status", { event: "status" });
-  const lblprinter = useEventSource("/sse/label_printer", { event: "message" });
+  const data = useEventSource("/sse/status", { event: "status" }) || "READY";
+  // const lblprinter = useEventSource("/sse/label_printer", { event: "message" });
   const [qty, setQty] = useState(1); // Initial value is 1
+  // const [savedQty, setSavedQty] = useState(1);
+  // const x = useLocalStorage("qty", 1);
   const today = new Date().toISOString().split("T")[0];
   const { file } = useParams();
   const navigation = useNavigation();
+
+  // synchronize initially
+  useLayoutEffect(() => {
+    const x = window.localStorage.getItem("qty") || 1;
+    setQty(Number(x));
+  }, []);
+
+  console.log({ nav: navigation.state, data });
 
   const canPrint = navigation.state === "idle" && data === "READY";
 
@@ -91,64 +102,54 @@ export default function Index() {
   //   return <div>OCUPADO</div>;
   // }
 
-  const form = (
-    <Form method="POST">
-      <Card>
-        <CardHeader>
-          <CardTitle>Imprimir etiqueta</CardTitle>
-          <CardDescription>{`Formato "${file}"`}</CardDescription>
-        </CardHeader>
-        <CardContent className="gap-2 flex flex-col">
-          <div>
-            <Label>Cantidad</Label>
-            <div className="flex gap-1">
-              <Input
-                type="number"
-                placeholder="Cantidad de etiquetas"
-                name="qty"
-                value={qty}
-                onChange={(e) => {
-                  setQty(e.target.value);
-                }}
-              />
-              <Button
-                variant={"default"}
-                type="button"
-                onClick={() => {
-                  setQty(123);
-                }}
-              >
-                123
-              </Button>
-            </div>
-          </div>
-          <div>
-            <Label>Fecha</Label>
-            <Input type="date" placeholder="Fecha" name="date" defaultValue={today} />
-          </div>
-          {/* <input hidden type="text" name="file" defaultValue={String(searchParams.get("file"))}></input> */}
-          <input hidden type="text" name="file" defaultValue={file}></input>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" disabled={navigation.state !== "idle"}>
-            Imprimir
-          </Button>
-          {navigation.state !== "idle" && <Label className="p-2">Imprimiendo...</Label>}
-        </CardFooter>
-      </Card>
-    </Form>
-  );
-
   return (
     <div className="flex flex-col p-6">
-      {/* <h1 className="bg-black text-white">{data.status}</h1> */}
-      {canPrint ? (
-        form
-      ) : (
-        <div className="flex justify-center items-center">
-          <Label>{lblprinter}</Label>
-        </div>
-      )}
+      <Form method="POST">
+        <Card>
+          <CardHeader>
+            <CardTitle>Imprimir etiqueta</CardTitle>
+            <CardDescription>{`Formato "${file}"`}</CardDescription>
+          </CardHeader>
+          <CardContent className="gap-2 flex flex-col">
+            <div>
+              <Label>Cantidad</Label>
+              <div className="flex gap-1">
+                <Input
+                  type="number"
+                  placeholder="Cantidad de etiquetas"
+                  name="qty"
+                  value={qty}
+                  onChange={(e) => {
+                    setQty(e.target.value);
+                    window.localStorage.setItem("qty", e.target.value);
+                  }}
+                />
+                <Button
+                  variant={"default"}
+                  type="button"
+                  onClick={() => {
+                    setQty(qty + 10);
+                  }}
+                >
+                  +10
+                </Button>
+              </div>
+            </div>
+            <div>
+              <Label>Fecha</Label>
+              <Input type="date" placeholder="Fecha" name="date" defaultValue={today} />
+            </div>
+            {/* <input hidden type="text" name="file" defaultValue={String(searchParams.get("file"))}></input> */}
+            <input hidden type="text" name="file" defaultValue={file}></input>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" disabled={!canPrint}>
+              Imprimir
+            </Button>
+            {!canPrint && <Label className="p-2">Ocupado...</Label>}
+          </CardFooter>
+        </Card>
+      </Form>
     </div>
   );
 }
