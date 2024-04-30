@@ -12,6 +12,7 @@ import { printing, printLabel } from "~/.server/print_label";
 import { useEventSource } from "remix-utils/sse/react";
 import { sendMessage } from "../sse.label_printer";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { setBusy } from "~/.server/serverBusy";
 
 let LATEST_COMMAND = "";
 
@@ -28,6 +29,7 @@ export async function loader({ params }) {
 // Action to handle form submission
 export async function action({ request }: ActionArgs) {
   console.log("printing1 (route.tsx)", printing);
+  setBusy(true);
   // Get the form data from the request
   let response = {};
   const body = await request.formData();
@@ -45,11 +47,12 @@ export async function action({ request }: ActionArgs) {
   const formFile = body.get("file");
 
   const command = `python 'app/routes/create_label.$file/label.py' create --date-offset ${formDate} ${formFile}`;
-  if (command === LATEST_COMMAND) {
+  const xcommand = formDate + command;
+  if (xcommand === LATEST_COMMAND) {
     console.log("Command already executed", command);
     return json({ command, ...response });
   }
-  LATEST_COMMAND = formDate + command;
+  LATEST_COMMAND = xcommand;
   sendMessage(`Creando Etiqueta: ${formFile} ${formDate}`);
   response = await execPromise(command);
   console.log("Command executed", command, response);

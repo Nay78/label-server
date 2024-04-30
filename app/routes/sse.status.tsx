@@ -2,7 +2,7 @@
 import { eventStream } from "remix-utils/sse/server";
 import { fetchAndExtractPrintingStatus } from "~/lib/printerUtils";
 import { EventEmitter } from "events";
-import { isPrinting } from "~/.server/print_label";
+import { isBusy } from "~/.server/serverBusy";
 
 // import { eventStream } from "remix-utils";
 // import "dotenv/config";
@@ -59,7 +59,7 @@ export async function loader({ request }: LoaderArgs) {
   console.log("request", request);
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (status: string) => {
-      if (status === "READY" && isPrinting()) {
+      if (status === "READY" && isBusy()) {
         return send({ event: "status", data: "PRINTING" });
       }
       const payload = { event: "status", data: status };
