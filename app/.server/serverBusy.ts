@@ -2,10 +2,10 @@ let serverBusy = false;
 let timeoutId: NodeJS.Timeout | null = null;
 const timeout = 60 * 1000;
 
-export function setBusy(busy: boolean = true) {
-  if (busy === serverBusy) {
-    return;
-  }
+export function setBusy(busy: boolean) {
+  //   if (busy === serverBusy) {
+  //     return;
+  //   }
   console.log("SERVER BUSY", busy);
   serverBusy = busy;
 

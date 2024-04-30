@@ -49,12 +49,13 @@ export async function action({ request }: ActionArgs) {
   const xcommand = formDate + command;
   if (xcommand === LATEST_COMMAND) {
     console.log("Command already executed", command);
-    return json({ command, ...response });
+    // return json({ command, ...response });
+  } else {
+    LATEST_COMMAND = xcommand;
+    sendMessage(`Creando Etiqueta: ${formFile} ${formDate}`);
+    response = await execPromise(command);
+    console.log("Command executed", command, response);
   }
-  LATEST_COMMAND = xcommand;
-  sendMessage(`Creando Etiqueta: ${formFile} ${formDate}`);
-  response = await execPromise(command);
-  console.log("Command executed", command, response);
 
   // await new Promise((resolve) => {
   //   setTimeout(() => {
@@ -65,14 +66,7 @@ export async function action({ request }: ActionArgs) {
   // print labels
   const qty = body.get("qty");
   const printFilename = `${formFile}_${formDate}`;
-  // const params = new URLSearchParams({ qty, filename: printFilename });
-
-  // const printLabelAction = "/print_label?" + params.toString();
   printLabel(printFilename, qty);
-  // fetch("/print_label", { method: "POST", body: JSON.stringify({ qty, filename: printFilename }) });
-
-  // sendMessage(`${qty} etiquetas impresas - ${printFilename}`);
-
   return json({ command, ...response });
 }
 
