@@ -73,7 +73,7 @@ def print_today_label(path=None, n=1, wait=2, brother_ql_path="brother_ql", prin
 
 def create_label(filename="AVE MAYO.odt", folder=None, date_offset=0):
     folder = folder or os.path.join(os.path.expanduser("~"), "Templates")
-    output_filename = f"{filename}_{today()}.odt"
+    output_filename = f"{filename}_{today(date_offset)}.odt"
     output_png_folder = os.path.join(folder, "Output")
     output_png_path = os.path.join(output_png_folder, output_filename)
     input_path = os.path.join(folder, filename)
