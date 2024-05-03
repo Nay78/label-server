@@ -164,8 +164,8 @@ if __name__ == "__main__":
         print("Creating label from template", args.filename, "in folder", args.folder, "with date", today(args.date))    
         create_label(args.filename, args.folder, date=args.date)
     if args.command == "create_format":
-        print("Creating pdf from template", args.filename, "in folder", args.folder, "with date", today(args.date))    
-        generate_template(args.input, args.output, date=args.data, format=args.format)
+        print(f"Creating {args.format} from template {args.input}, replacing: {args.data}")    
+        generate_template(args.input, args.output, args.data, args.format)
     elif args.command == "print":
         print("Printing label from path", args.path)
         print_today_label(args.path, qty=int(args.qty), wait=float(args.wait), brother_ql_path=args.brother_ql_path, printer_ip=args.printer_ip)
