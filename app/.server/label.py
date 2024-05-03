@@ -57,6 +57,8 @@ def replace_text_in_odt(input_path, output_path, replacements: dict):
     if type(replacements) == str:
         replacements = json.loads(replacements)
 
+    replacements = {key: str(value) for key, value in replacements.items()}
+
     if os.path.exists(output_path) and os.path.isdir(output_path):
         output_folder = output_path
         output_path = os.path.join(output_folder, os.path.basename(input_path))
