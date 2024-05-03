@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { Form, useNavigation, useParams, useRouteLoaderData } from "@remix-run/react";
+import { Form, useNavigation, useParams } from "@remix-run/react";
 // import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
@@ -10,7 +10,6 @@ import { useLayoutEffect, useState } from "react";
 import { execPromise } from "~/.server/utils";
 import { useEventSource } from "remix-utils/sse/react";
 import { sendMessage } from "../sse.label_printer";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { setBusy } from "~/.server/serverBusy";
 import { printLabel } from "~/.server/printLabel";
 
@@ -45,7 +44,7 @@ export async function action({ request }: ActionArgs) {
   // const offset = (date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
   const formFile = body.get("file");
 
-  const command = `python 'app/routes/create_label.$file/label.py' create --date-offset ${formDate} ${formFile}`;
+  const command = `python 'app/.server/label.py' create --date-offset ${formDate} ${formFile}`;
   const xcommand = formDate + command;
   if (xcommand === LATEST_COMMAND) {
     console.log("Command already executed", command);

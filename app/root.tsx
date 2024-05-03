@@ -6,7 +6,9 @@ import Footer from "./components/footer";
 import { fetchAndExtractPrintingStatus } from "./lib/printerUtils";
 import { useSSE, SSEProvider } from "react-hooks-sse";
 import FooterLabel from "./components/FooterLabel";
-import { EventSourceProvider } from "remix-utils/sse/react";
+import { EventSourceProvider, useEventSource } from "remix-utils/sse/react";
+import { Label } from "./components/ui/label";
+import Header from "./components/Header";
 
 const map = new Map();
 
@@ -30,20 +32,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-// export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR"> {
-//   if (!isDev) {
-//     const url = `http://${PRINTER_IP}/general/monitor.html`;
-//     return await fetchAndExtractPrintingStatus(url);
-//   } else {
-//     return await fetch("http://192.168.1.200:2999/status");
-//   }
-// }
-
-// export async function loader() {
-//   return await getBrotherPrinterStatus();
-// }
-
 export default function App() {
+  const messages = useEventSource("/sse/label_printer", { event: "message" });
+
   // const data2 = useEventSource("/sse/status", { event: "status" });
 
   // const data = useLoaderData();
@@ -64,8 +55,14 @@ export default function App() {
   return (
     <>
       {/* <h1>{data2}</h1> */}
+      <Header></Header>
       <Outlet />
-      <footer className="w-full py-6 border-t space-y-3">
+      <footer className="w-full py-6 border-t space-y-3 flex flex-col">
+        <div className=" text-white text-center w-full flex-grow p-2 rounded-lg">
+          <div className="bg-black rounded-lg p-2 w-full">
+            <span>{messages}</span>
+          </div>
+        </div>
         <FooterLabel></FooterLabel>
         <Footer printer_status="READY" nombre="Papel" texto=""></Footer>
       </footer>

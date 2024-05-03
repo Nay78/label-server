@@ -10,8 +10,6 @@ import { useEventSource } from "remix-utils/sse/react";
  */
 export default function FooterLabel() {
   const data = useEventSource("/sse/status", { event: "status" }) || "...";
-  const messages = useEventSource("/sse/label_printer", { event: "message" });
-
   const printer_status = data || "ERROR";
   // console.log("FooterLabel");
   // console.log("printer_status", data);
@@ -31,7 +29,6 @@ export default function FooterLabel() {
         <PrinterIcon className="w-4 h-4" />
         <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">Etiquetas</div>
       </div>
-      <Label>{messages}</Label>
       <div className="flex items-center gap-1">
         <CircleIcon className={`w-3 h-3 ${status_color}`} />
         <span className="text-sm font-medium">{printer_status}</span>

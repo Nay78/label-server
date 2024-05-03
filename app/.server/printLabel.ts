@@ -59,7 +59,6 @@ export async function printLabel(filename: string, qty: number) {
   const filepath = path.join(os.homedir(), "Templates", "Output", `${filename}.png`);
 
   const command = `${BROTHER_QL_PATH} --backend network --model QL-810W --printer tcp://${PRINTER_ADDRESS} print --label 62 -d ${filepath}`;
-  // const command = `python label.py print --brother ${file}`;
   console.log("command", command);
 
   for (let i = 0; i < qty; i++) {
