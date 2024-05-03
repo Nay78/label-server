@@ -69,8 +69,8 @@ def replace_text_in_odt(input_path, output_path, replacements: dict):
     edit_zip_file(input_path, 'content.xml', replace_text_func, output_path)
     return output_path
 
-def generate_template(input_file_path, output_file_path, replacements, format='odt'):
-    output_path = replace_text_in_odt(input_file_path, output_file_path, replacements)
+def generate_template(input_file_path, output_folder_path, replacements, format='odt'):
+    output_path = replace_text_in_odt(input_file_path, output_folder_path, replacements)
     output_folder = os.path.dirname(output_path)
     filename = os.path.basename(output_path).split(".")[0]
     if format == 'odt':
@@ -80,8 +80,8 @@ def generate_template(input_file_path, output_file_path, replacements, format='o
         os.remove(output_path)
         return os.path.join(output_folder, f"{filename}.pdf")
     elif format == 'png':
-        convert_odt_to_pdf(output_path, output_folder)
-        os.remove(output_folder)
+        convert_odt_to_png(output_path, output_folder)
+        os.remove(output_path)
         return os.path.join(output_folder, f"{filename}.png")
     else:
         raise ValueError(f"Invalid format: {format}")

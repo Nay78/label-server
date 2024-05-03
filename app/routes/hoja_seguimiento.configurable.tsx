@@ -33,12 +33,16 @@ export async function action({ request }: ActionArgs) {
 
   const output_path = path.join(OUTPUT_FOLDER, `SEGUIMIENTO_${formDate}.pdf`);
 
-  const command = `python 'app/.server/label.py' create_format --format pdf ${SEGUIMIENTO_CONFIGURABLE_PATH} ${output_path} '${JSON.stringify(
+  const command = `python 'app/.server/label.py' create_format --format pdf ${SEGUIMIENTO_CONFIGURABLE_PATH} ${OUTPUT_FOLDER} '${JSON.stringify(
     reemplazos
   )}'`;
   console.log("crear hoja seguimiento configurable:", command);
   sendMessage(`Creando hoja de seguimiento ${formDate}`);
   response = await execPromise(command);
+  if (!response) {
+    sendMessage(`Error al crear hoja de seguimiento ${formDate}`);
+    return json({ command, error: "Error al crear hoja de seguimiento" });
+  }
 
   sendMessage(`Imprimiendo hoja de seguimiento ${formDate}`);
   response = await printPaper(output_path, 1);
