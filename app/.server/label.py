@@ -57,7 +57,7 @@ def replace_text_in_odt(input_path, output_path, replacements: dict):
     if type(replacements) == str:
         replacements = json.loads(replacements)
 
-    replacements = {key: str(value) for key, value in replacements.items()}
+    replacements = {"{" + key + "}": str(value) for key, value in replacements.items()}
 
     if os.path.exists(output_path) and os.path.isdir(output_path):
         output_folder = output_path
@@ -69,10 +69,13 @@ def replace_text_in_odt(input_path, output_path, replacements: dict):
     edit_zip_file(input_path, 'content.xml', replace_text_func, output_path)
     return output_path
 
-def generate_template(input_file_path, output_folder_path, replacements, format='odt'):
+def generate_template(input_file_path, output_file_path, replacements):
+    output_folder_path = os.path.dirname(output_file_path)
+    filename = os.path.basename(output_file_path).split(".")[0]
+    format = output_file_path.split(".")[-1]
+
     output_path = replace_text_in_odt(input_file_path, output_folder_path, replacements)
     output_folder = os.path.dirname(output_path)
-    filename = os.path.basename(output_path).split(".")[0]
     if format == 'odt':
         return output_path
     elif format == 'pdf':
@@ -84,7 +87,7 @@ def generate_template(input_file_path, output_folder_path, replacements, format=
         os.remove(output_path)
         return os.path.join(output_folder, f"{filename}.png")
     else:
-        raise ValueError(f"Invalid format: {format}")
+        raise ValueError(f"Invalid format: {format=} {filename=} {output_file_path=}")
 
 
 # convert .odt file to png using command line
@@ -152,7 +155,7 @@ if __name__ == "__main__":
     create_pdf_parser.add_argument('input', type=str, help='The path of the file to use as a template.')
     create_pdf_parser.add_argument('output', type=str, help='Can be the result path or the folder where the result should be.')
     create_pdf_parser.add_argument('data', default="{}", help='json data, {key: value}.')
-    create_pdf_parser.add_argument('--format', default="pdf", help='output format odt pdf png')
+    # create_pdf_parser.add_argument('--format', default="pdf", help='output format odt pdf png')
 
     print_label_parser = subparsers.add_parser('print', help='Create a label.')
     print_label_parser.add_argument('--path', type=str, default=os.path.join(os.path.expanduser("~"), "Templates", "Output", f"{today()}.png"), help='path')
@@ -166,8 +169,8 @@ if __name__ == "__main__":
         print("Creating label from template", args.filename, "in folder", args.folder, "with date", today(args.date))    
         create_label(args.filename, args.folder, date=args.date)
     if args.command == "create_format":
-        print(f"Creating {args.format} from template {args.input}, replacing: {args.data}")    
-        generate_template(args.input, args.output, args.data, args.format)
+        print(f"Creating from template {args.input}, replacing: {args.data}")    
+        generate_template(args.input, args.output, args.data)
     elif args.command == "print":
         print("Printing label from path", args.path)
         print_today_label(args.path, qty=int(args.qty), wait=float(args.wait), brother_ql_path=args.brother_ql_path, printer_ip=args.printer_ip)
