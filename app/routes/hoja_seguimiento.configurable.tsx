@@ -20,12 +20,15 @@ export async function action({ request }: ActionArgs) {
   let response = {};
   const body = await request.formData();
   const formDate = body.get("date");
+  const rodado = body.get("seguimientoRodado");
+  const carola = body.get("seguimientoCarola");
+  const total = body.get("total") || Number(rodado) + Number(carola);
 
   const reemplazos = {
     fecha: formDate,
-    rodado: body.get("seguimientoRodado"),
-    carola: body.get("seguimientoCarola"),
-    total: body.get("total"),
+    rodado,
+    carola,
+    total,
   };
 
   const output_path = path.join(OUTPUT_FOLDER, `SEGUIMIENTO_${formDate}.pdf`);

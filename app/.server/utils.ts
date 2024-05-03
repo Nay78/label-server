@@ -5,12 +5,14 @@ export function execPromise(command: string) {
   return new Promise<{ error?: string; message?: string; output?: string }>((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error executing script: ${error.message}`);
+        // console.error(`Error executing script: ${error.message}`);
+        console.log(`Command exec ERROR: ${command} \n\nstdout: ${stdout} \n\nstderr: ${stderr}`);
+
         resolve({ error: "Error executing script", message: error.message });
         return;
       }
 
-      console.log(`Command exec SUCCESS: ${command} \nOUTPUT: ${stdout}`);
+      console.log(`Command exec SUCCESS: ${command} \n\nstdout: ${stdout}`);
       resolve({ output: stdout });
     });
   });
