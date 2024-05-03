@@ -75,13 +75,15 @@ def generate_template(input_file_path, output_file_path, replacements):
     format = output_file_path.split(".")[-1]
 
     output_path = replace_text_in_odt(input_file_path, output_folder_path, replacements)
+    out_filename = os.path.basename(output_path).split(".")[0]
     output_folder = os.path.dirname(output_path)
     if format == 'odt':
-        return output_path
+        os.rename(output_path, output_file_path)
+        return output_file_path
     elif format == 'pdf':
-        convert_odt_to_pdf(output_path, output_folder)
-        os.remove(output_path)
-        return os.path.join(output_folder, f"{filename}.pdf")
+        # os.rename(output_path, output_file_path)
+        return convert_odt_to_pdf(output_path, output_folder, rename=filename, keep=False)
+        # return os.path.join(output_folder, f"{filename}.pdf")
     elif format == 'png':
         convert_odt_to_png(output_path, output_folder)
         os.remove(output_path)
@@ -92,11 +94,22 @@ def generate_template(input_file_path, output_file_path, replacements):
 
 # convert .odt file to png using command line
 # run in command line: soffice --headless --convert-to png template_test1.odt
-def convert_odt_to_png(input_path, output_path):
-    subprocess.run(['soffice', '--headless', '--convert-to', 'png', input_path, '--outdir', output_path])
+def convert_odt_to_png(input_path, outdir, keep=True):
+    subprocess.run(['soffice', '--headless', '--convert-to', 'png', input_path, '--outdir', outdir])
+    if not keep:
+        os.remove(input_path)
 
-def convert_odt_to_pdf(input_path, output_path):
-    subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', input_path, '--outdir', output_path])
+def convert_odt_to_pdf(input_path, outdir, rename=None, keep=True):
+    out_filename = os.path.basename(input_path).split(".")[0] + ".pdf"
+    subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', input_path, '--outdir', outdir])
+    if not keep:
+        os.remove(input_path)
+    
+    if rename:
+        rename_path = os.path.join(outdir, f"{rename}.pdf")
+        os.rename(os.path.join(outdir, out_filename), rename_path)
+        return rename_path
+    return out_filename
 
 def today(offset=0, offset2=0): 
     try:

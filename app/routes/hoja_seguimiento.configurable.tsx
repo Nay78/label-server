@@ -123,6 +123,20 @@ export default function Index() {
                     window.localStorage.setItem("seguimientoRodado", e.target.value);
                   }}
                 />
+                <Button
+                  type="button"
+                  className="h-10 w-12"
+                  onClick={() => setSeguimientoRodado(Number(seguimientoRodado) + 1)}
+                >
+                  +
+                </Button>
+                <Button
+                  type="button"
+                  className="h-10 w-12"
+                  onClick={() => setSeguimientoRodado(Number(seguimientoRodado) - 1)}
+                >
+                  -
+                </Button>
               </div>
             </div>
             <div>
@@ -138,6 +152,20 @@ export default function Index() {
                     window.localStorage.setItem("seguimientoCarola", e.target.value);
                   }}
                 />
+                <Button
+                  type="button"
+                  className="h-10 w-12"
+                  onClick={() => setSeguimientoCarola(Number(seguimientoCarola) + 1)}
+                >
+                  +
+                </Button>
+                <Button
+                  type="button"
+                  className="h-10 w-12"
+                  onClick={() => setSeguimientoCarola(Number(seguimientoCarola) - 1)}
+                >
+                  -
+                </Button>
               </div>
             </div>
 
