@@ -44,7 +44,7 @@ export async function action({ request }: ActionArgs) {
   // const offset = (date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
   const formFile = body.get("file");
 
-  const command = `python 'app/.server/label.py' create --date-offset ${formDate} ${formFile}`;
+  const command = `python 'app/.server/label.py' create --date ${formDate} ${formFile}`;
   const xcommand = formDate + command;
   if (xcommand === LATEST_COMMAND) {
     console.log("Command already executed", command);
@@ -53,7 +53,7 @@ export async function action({ request }: ActionArgs) {
     LATEST_COMMAND = xcommand;
     sendMessage(`Creando Etiqueta: ${formFile} ${formDate}`);
     response = await execPromise(command);
-    console.log("Command executed", command, response);
+    // console.log("Command executed", command, response);
   }
 
   // await new Promise((resolve) => {

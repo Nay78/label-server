@@ -4,10 +4,6 @@ import fs from "fs/promises";
 import { Button } from "~/components/ui/button";
 import os from "os";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "New Remix App" }, { name: "description", content: "Welcome to Remix!" }];
-};
-
 export async function loader() {
   const homeDirectory = os.homedir();
   console.log(homeDirectory);

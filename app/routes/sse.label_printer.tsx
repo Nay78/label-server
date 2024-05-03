@@ -26,7 +26,6 @@ export function sendMessage(msg: string) {
 }
 
 export async function loader({ request }) {
-  console.log("request", request);
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (msg: string) => {
       const payload = { event: "message", data: msg };

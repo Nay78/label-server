@@ -56,7 +56,6 @@ async function checkPrinterStatus() {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  console.log("request", request);
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (status: string) => {
       if (status === "READY" && isBusy()) {

@@ -4,10 +4,6 @@ import fs from "fs/promises";
 import { Button } from "~/components/ui/button";
 import os from "os";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "New Remix App" }, { name: "description", content: "Welcome to Remix!" }];
-};
-
 export async function loader() {
   const homeDirectory = os.homedir();
   console.log(homeDirectory);
@@ -32,7 +28,7 @@ export default function Index() {
   return (
     <div className="grid grid-cols-2 items-center justify-center gap-2 p-2">
       <Button asChild>
-        <Link to={`./configurable`}>Configurar hoja</Link>
+        <Link to={`./configurable`}>Hoja Configurable</Link>
       </Button>
       <Button asChild>
         <Link to={`./generica`}>Hoja Generica</Link>

@@ -58,9 +58,9 @@ export default function App() {
       <Header></Header>
       <Outlet />
       <footer className="w-full py-6 border-t space-y-3 flex flex-col">
-        <div className=" text-white text-center w-full flex-grow p-2 rounded-lg">
-          <div className="bg-black rounded-lg p-2 w-full">
-            <span>{messages}</span>
+        <div className=" text-center w-full flex-grow p-1 rounded-lg">
+          <div className="bg-gray-100 rounded-lg p-1 w-full">
+            <Label className="text-xs">{messages}</Label>
           </div>
         </div>
         <FooterLabel></FooterLabel>
