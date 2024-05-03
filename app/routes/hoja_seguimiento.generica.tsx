@@ -7,9 +7,8 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
 import { useLayoutEffect, useState } from "react";
-import { execPromise } from "~/.server/utils";
 import { setBusy } from "~/.server/serverBusy";
-import { PAPER_PRINTER_NAME, SEGUIMIENTO_GENERICA_PATH } from "~/.server/variables";
+import { SEGUIMIENTO_GENERICA_PATH } from "~/.server/variables";
 import printPaper from "~/.server/printPaper";
 import { sendMessage } from "./sse.label_printer";
 
@@ -31,8 +30,9 @@ export async function action({ request }: ActionArgs) {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve("Promise resolved");
-    }, 3000);
+    }, 5000);
   });
+  sendMessage(`Listo`);
   return json({ ...response });
 }
 

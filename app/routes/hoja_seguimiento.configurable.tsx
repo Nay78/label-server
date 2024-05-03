@@ -59,8 +59,10 @@ export async function action({ request }: ActionArgs) {
   await new Promise((resolve) => {
     setTimeout(() => {
       resolve("Promise resolved");
-    }, 3000);
+    }, 5000);
   });
+  sendMessage(`Listo`);
+
   return json({ command, ...response });
 }
 
