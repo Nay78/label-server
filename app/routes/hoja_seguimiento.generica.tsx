@@ -76,11 +76,11 @@ export default function Index() {
                   variant={"default"}
                   type="button"
                   onClick={() => {
-                    setQty(qty + 10);
+                    setQty(qty + 1);
                   }}
                   className="h-10"
                 >
-                  +10
+                  +
                 </Button>
               </div>
             </div>
@@ -90,6 +90,9 @@ export default function Index() {
               Imprimir
             </Button>
             {!canPrint && <Label className="p-2">Ocupado...</Label>}
+            <Button variant={"destructive"} type="submit" disabled={canPrint}>
+              Cancelar
+            </Button>
           </CardFooter>
         </Card>
       </Form>

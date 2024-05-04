@@ -7,9 +7,19 @@ import { isBusy, setBusy } from "./serverBusy";
 
 export let printing = false;
 let printerError = false;
+let isCancelled = false;
 
 const BROTHER_QL_PATH = import.meta.env.VITE_BROTHER_QL_PATH;
 const PRINTER_ADDRESS = import.meta.env.VITE_PRINTER_ADDRESS;
+
+export function cancelPrint() {
+  console.log("cancelPrint called");
+  if (!printing) {
+    return false;
+  }
+  isCancelled = true;
+  return true;
+}
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -65,6 +75,13 @@ export async function printLabel(filename: string, qty: number) {
     const msg = `Imprimiendo: ${i + 1}/${qty}`;
     sendMessage(msg);
     await waitForReady();
+    if (isCancelled) {
+      sendMessage("Impresión cancelada");
+      isCancelled = false;
+      printing = false;
+      setBusy(false);
+      return { command, printing: false, output: "cancelled" };
+    }
     const result = await execPromise(command);
     await new Promise((resolve) => setTimeout(resolve, wait * 1000));
     console.log(result);

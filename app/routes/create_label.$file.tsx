@@ -9,7 +9,7 @@ import { Label } from "~/components/ui/label";
 import { useLayoutEffect, useState } from "react";
 import { execPromise } from "~/.server/utils";
 import { useEventSource } from "remix-utils/sse/react";
-import { sendMessage } from "../sse.label_printer";
+import { sendMessage } from "./sse.label_printer";
 import { setBusy } from "~/.server/serverBusy";
 import { printLabel } from "~/.server/printLabel";
 
@@ -31,13 +31,6 @@ export async function action({ request }: ActionArgs) {
   // Get the form data from the request
   let response = {};
   const body = await request.formData();
-
-  // const data = {
-  //   name: body.get("file"),
-  //   date: body.get("date"),
-  //   qty: body.get("qty"),
-  // };
-
   const formDate = body.get("date");
   // const date = new Date(body.get("date"));
   // const today = new Date();
@@ -143,13 +136,22 @@ export default function Index() {
               <Input type="date" placeholder="Fecha" name="date" defaultValue={today} />
             </div>
             {/* <input hidden type="text" name="file" defaultValue={String(searchParams.get("file"))}></input> */}
-            <input hidden type="text" name="file" defaultValue={file}></input>
+            <input hidden type="text" name="file" value={file}></input>
           </CardContent>
-          <CardFooter>
-            <Button type="submit" disabled={!canPrint}>
-              Imprimir
+          <CardFooter className="flex justify-between gap-4">
+            <Button className="flex-grow" type="submit" disabled={!canPrint}>
+              {canPrint ? "Imprimir" : "Ocupado..."}
             </Button>
-            {!canPrint && <Label className="p-2">Ocupado...</Label>}
+            {/* {!canPrint && <Label className="p-2">Ocupado...</Label>} */}
+
+            <Button
+              type="button"
+              onClick={() => fetch("/create_label/cancel")}
+              variant={"destructive"}
+              disabled={!canPrint}
+            >
+              Cancelar
+            </Button>
           </CardFooter>
         </Card>
       </Form>
