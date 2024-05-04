@@ -55,7 +55,18 @@ async function waitForReady(polling = 500) {
   });
 }
 
+function onCancel() {
+  sendMessage("Impresión cancelada");
+  isCancelled = false;
+  printing = false;
+  setBusy(false);
+  return { printing: false, output: "cancelled" };
+}
+
 export async function printLabel(filename: string, qty: number) {
+  if (isCancelled) {
+    return onCancel();
+  }
   console.log("print_label called");
 
   if (printing) {
@@ -76,11 +87,7 @@ export async function printLabel(filename: string, qty: number) {
     sendMessage(msg);
     await waitForReady();
     if (isCancelled) {
-      sendMessage("Impresión cancelada");
-      isCancelled = false;
-      printing = false;
-      setBusy(false);
-      return { command, printing: false, output: "cancelled" };
+      return onCancel();
     }
     const result = await execPromise(command);
     await new Promise((resolve) => setTimeout(resolve, wait * 1000));

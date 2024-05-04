@@ -146,8 +146,8 @@ export default function Index() {
 
             <Button
               type="button"
-              onClick={() => {
-                fetch("/create_label/cancel");
+              onClick={async () => {
+                await fetch("/create_label/cancel");
                 window.location.reload();
               }}
               variant={"destructive"}
