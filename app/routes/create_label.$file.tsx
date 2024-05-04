@@ -148,7 +148,7 @@ export default function Index() {
               type="button"
               onClick={() => fetch("/create_label/cancel")}
               variant={"destructive"}
-              disabled={!canPrint}
+              disabled={canPrint}
             >
               Cancelar
             </Button>
