@@ -86,12 +86,8 @@ export default function Index() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={!canPrint}>
-              Imprimir
-            </Button>
-            {!canPrint && <Label className="p-2">Ocupado...</Label>}
-            <Button variant={"destructive"} type="submit" disabled={canPrint}>
-              Cancelar
+            <Button className="flex-grow" type="submit" disabled={!canPrint}>
+              {canPrint ? "Imprimir" : "Ocupado..."}
             </Button>
           </CardFooter>
         </Card>

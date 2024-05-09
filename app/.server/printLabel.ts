@@ -94,7 +94,6 @@ export async function printLabel(filename: string, qty: number) {
     console.log(result);
   }
 
-  sendMessage(`Etiqueta ${filename} impresa ${qty} veces`);
   printing = false;
   setBusy(false);
   return { command, printing: false, output: "success" };

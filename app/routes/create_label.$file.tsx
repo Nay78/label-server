@@ -123,11 +123,21 @@ export default function Index() {
                   variant={"default"}
                   type="button"
                   onClick={() => {
-                    setQty(qty + 10);
+                    setQty(qty + 1);
                   }}
                   className="h-10"
                 >
-                  +10
+                  +
+                </Button>
+                <Button
+                  variant={"default"}
+                  type="button"
+                  onClick={() => {
+                    setQty(qty - 1);
+                  }}
+                  className="h-10"
+                >
+                  -
                 </Button>
               </div>
             </div>

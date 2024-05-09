@@ -30,7 +30,7 @@ export default function Index() {
       <Button asChild>
         <Link to={`./configurable`}>Hoja Configurable</Link>
       </Button>
-      <Button asChild>
+      <Button variant={"secondary"} asChild>
         <Link to={`./generica`}>Hoja Generica</Link>
       </Button>
       {/* {templateFiles.map(({ filename, name }) => (

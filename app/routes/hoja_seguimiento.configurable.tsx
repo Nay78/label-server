@@ -179,10 +179,9 @@ export default function Index() {
             <input hidden type="text" name="file" defaultValue={file}></input>
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={!canPrint}>
-              Imprimir
+            <Button className="flex-grow" type="submit" disabled={!canPrint}>
+              {canPrint ? "Imprimir" : "Ocupado..."}
             </Button>
-            {!canPrint && <Label className="p-2">Ocupado...</Label>}
           </CardFooter>
         </Card>
       </Form>
