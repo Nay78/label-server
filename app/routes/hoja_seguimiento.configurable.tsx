@@ -67,8 +67,8 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function Index() {
-  const [seguimientoRodado, setSeguimientoRodado] = useState(1); // Initial value is 1
-  const [seguimientoCarola, setSeguimientoCarola] = useState(1); // Initial value is 1
+  const [seguimientoRodado, setRodado] = useState<number>(1); // Initial value is 1
+  const [seguimientoCarola, setCarola] = useState<number>(1); // Initial value is 1
   // const [savedQty, setSavedQty] = useState(1);
   // const x = useLocalStorage("qty", 1);
   const today = new Date().toISOString().split("T")[0];
@@ -80,22 +80,23 @@ export default function Index() {
     // const x = window.localStorage.getItem("seguimientoTotal") || 1;
     // setSeguimientoTotal(Number(x));
     const y = window.localStorage.getItem("seguimientoRodado") || 1;
-    setSeguimientoRodado(Number(y));
+    setSeguimientoRodado(y);
     const z = window.localStorage.getItem("seguimientoCarola") || 1;
-    setSeguimientoCarola(Number(z));
+    setSeguimientoCarola(z);
   }, []);
 
   const canPrint = navigation.state === "idle";
   const total = Number(seguimientoCarola) + Number(seguimientoRodado);
 
-  // const maxRodado = seguimientoTotal - seguimientoCarola[0];
-  // const maxCarola = seguimientoTotal - seguimientoRodado[0];
+  function setSeguimientoRodado(value: string | number) {
+    setRodado(Number(value));
+    window.localStorage.setItem("seguimientoRodado", String(value));
+  }
 
-  // console.log("data", searchParams);
-  // console.log("f", f);
-  // if (!canPrint) {
-  //   return <div>OCUPADO</div>;
-  // }
+  function setSeguimientoCarola(value: string | number) {
+    setCarola(Number(value));
+    window.localStorage.setItem("seguimientoCarola", String(value));
+  }
 
   return (
     <div className="flex flex-col p-6">
@@ -122,21 +123,12 @@ export default function Index() {
                   value={seguimientoRodado}
                   onChange={(e) => {
                     setSeguimientoRodado(e.target.value);
-                    window.localStorage.setItem("seguimientoRodado", e.target.value);
                   }}
                 />
-                <Button
-                  type="button"
-                  className="h-10 w-12"
-                  onClick={() => setSeguimientoRodado(Number(seguimientoRodado) + 1)}
-                >
+                <Button type="button" className="h-10 w-12" onClick={() => setSeguimientoRodado(seguimientoRodado + 1)}>
                   +
                 </Button>
-                <Button
-                  type="button"
-                  className="h-10 w-12"
-                  onClick={() => setSeguimientoRodado(Number(seguimientoRodado) - 1)}
-                >
+                <Button type="button" className="h-10 w-12" onClick={() => setSeguimientoRodado(seguimientoRodado - 1)}>
                   -
                 </Button>
               </div>
@@ -151,21 +143,12 @@ export default function Index() {
                   value={seguimientoCarola}
                   onChange={(e) => {
                     setSeguimientoCarola(e.target.value);
-                    window.localStorage.setItem("seguimientoCarola", e.target.value);
                   }}
                 />
-                <Button
-                  type="button"
-                  className="h-10 w-12"
-                  onClick={() => setSeguimientoCarola(Number(seguimientoCarola) + 1)}
-                >
+                <Button type="button" className="h-10 w-12" onClick={() => setSeguimientoCarola(seguimientoCarola + 1)}>
                   +
                 </Button>
-                <Button
-                  type="button"
-                  className="h-10 w-12"
-                  onClick={() => setSeguimientoCarola(Number(seguimientoCarola) - 1)}
-                >
+                <Button type="button" className="h-10 w-12" onClick={() => setSeguimientoCarola(seguimientoCarola - 1)}>
                   -
                 </Button>
               </div>
