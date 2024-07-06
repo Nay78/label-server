@@ -3,7 +3,6 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/reac
 import type { LinksFunction } from "@remix-run/node";
 import stylesheet from "~/globals.css?url";
 import Footer from "./components/footer";
-import { fetchAndExtractPrintingStatus } from "./lib/printerUtils";
 import { useSSE, SSEProvider } from "react-hooks-sse";
 import FooterLabel from "./components/FooterLabel";
 import { EventSourceProvider, useEventSource } from "remix-utils/sse/react";

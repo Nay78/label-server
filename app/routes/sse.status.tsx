@@ -31,9 +31,15 @@ export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | 
     return last_result;
   }
   // let result;
-  const result = await fetchAndExtractPrintingStatus(URL);
-  timestamp = Date.now();
-  return result;
+  try {
+    const result = await fetchAndExtractPrintingStatus(URL);
+    timestamp = Date.now();
+    return result;
+  } catch (error) {
+    timestamp = Date.now();
+    console.error("Error fetching printer status", error);
+    return "SERVER_ERROR";
+  }
 }
 
 export function getPrinterStatus() {
