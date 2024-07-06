@@ -14,6 +14,7 @@ export default function Component() {
         <span className="font-medium text-gray-700 dark:text-gray-300">Atras</span>
       </Link>
       {/* <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Page Title</h1> */}
+      <div>Versión 0.11</div>
       <img src={"./KFS_LOGO.jpg"} alt="" className="h-12" />
 
       {/* <div className="w-5 h-5" /> */}
