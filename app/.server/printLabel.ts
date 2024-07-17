@@ -55,6 +55,25 @@ async function waitForReady(polling = 500) {
   });
 }
 
+async function waitForBusy(polling = 500, timeout = 5000) {
+  return new Promise((resolve, reject) => {
+    let elapsedTime = 0;
+    const intervalId = setInterval(async () => {
+      const status = getPrinterStatus();
+      if (status !== "READY") {
+        clearInterval(intervalId);
+        releasePrinterError();
+        resolve(void 0);
+      }
+      elapsedTime += polling;
+      if (elapsedTime >= timeout) {
+        clearInterval(intervalId);
+        reject(new Error("Timeout waiting for printer to become ready"));
+      }
+    }, polling);
+  });
+}
+
 function onCancel() {
   sendMessage("Impresión cancelada");
   isCancelled = false;
@@ -91,6 +110,7 @@ export async function printLabel(filename: string, qty: number) {
     }
     const result = await execPromise(command);
     await new Promise((resolve) => setTimeout(resolve, wait * 1000));
+    // await waitForBusy();
     console.log(result);
   }
 
