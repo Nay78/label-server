@@ -39,10 +39,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
   setBusy(true);
   // Get the form data from the request
   let response = {};
-  const qty = body.get("qty") || 1;
+  const qty = Number(body.get("qty")) || 1;
 
   sendMessage("Imprimiendo documento");
-  response = await printPaper(filepath, qty);
+  const completePath = path.join(homeDirectory, filepath);
+  response = await printPaper(completePath, qty);
 
   // wait for 3 seconds to avoid client sending another request
   await new Promise((resolve) => {
