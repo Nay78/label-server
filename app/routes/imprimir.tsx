@@ -115,7 +115,7 @@ export default function Index() {
 
           <CardContent className="gap-2 flex flex-col">
             <div>
-              <Form method="POST" action="">
+              <Form method="POST">
                 <div className="flex items-center gap-4 justify-center">
                   {/* <Label className="w-64 ">{selectedFile}</Label> */}
 
