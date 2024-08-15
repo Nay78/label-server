@@ -1,6 +1,10 @@
 import { DOMParser } from "xmldom";
 
-export async function fetchAndExtractPrintingStatus(url: string): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR"> {
+export async function fetchAndExtractPrintingStatus(url?: string): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR"> {
+  if (!url) {
+    console.log("No printer IP");
+    return "ERROR";
+  }
   // Fetch the response
   const response = await fetch(url);
 

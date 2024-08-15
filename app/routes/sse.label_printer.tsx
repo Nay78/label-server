@@ -1,5 +1,6 @@
 import { eventStream } from "remix-utils/sse/server";
 import { EventEmitter } from "events";
+import { LoaderFunctionArgs } from "@remix-run/node";
 
 const msgEmitter = new EventEmitter();
 msgEmitter.on("message", (msg) => {
@@ -25,7 +26,7 @@ export function sendMessage(msg: string) {
   msgEmitter.emit("message", lastMessage);
 }
 
-export async function loader({ request }) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (msg: string) => {
       const payload = { event: "message", data: msg };

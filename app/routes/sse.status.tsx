@@ -3,13 +3,14 @@ import { eventStream } from "remix-utils/sse/server";
 import { fetchAndExtractPrintingStatus } from "~/lib/printerUtils";
 import { EventEmitter } from "events";
 import { isBusy } from "~/.server/serverBusy";
+import { LoaderFunctionArgs } from "@remix-run/node";
 
 // import { eventStream } from "remix-utils";
 // import "dotenv/config";
 // const isDev = import.meta.env.ENVIRONMENT === "DEV";
 
 const PRINTER_IP = import.meta.env.VITE_PRINTER_IP;
-const URL = `http://${PRINTER_IP}/general/monitor.html`;
+const URL = PRINTER_IP ? `http://${PRINTER_IP}/general/monitor.html` : undefined;
 const POLLING = Number(import.meta.env.VITE_POLLING) || 1000;
 
 const printerStatusEmitter = new EventEmitter();
@@ -25,7 +26,7 @@ printerStatusEmitter.on("statusChanged", () => {
 
 let timestamp = Date.now() - POLLING;
 let last_result: "READY" | "PRINTING" | "BUSY" | "ERROR" | "SERVER_ERROR";
-
+printerStatusEmitter;
 export async function getBrotherPrinterStatus(): Promise<"READY" | "PRINTING" | "BUSY" | "ERROR" | "SERVER_ERROR"> {
   if (last_result && Date.now() - timestamp < POLLING) {
     return last_result;
@@ -61,7 +62,7 @@ async function checkPrinterStatus() {
   }
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return eventStream(request.signal, function setup(send) {
     const statusChangedHandler = async (status: string) => {
       if (status === "READY" && isBusy()) {

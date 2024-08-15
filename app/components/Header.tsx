@@ -9,12 +9,12 @@ import { Link } from "@remix-run/react";
 export default function Component() {
   return (
     <header className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-      <Link className="flex items-center space-x-2 h-full w-20" to={".."}>
+      <Link className="flex items-center space-x-2 h-full w-20" to={"/"}>
         <ArrowLeftIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-        <span className="font-medium text-gray-700 dark:text-gray-300">Atras</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">Inicio</span>
       </Link>
       {/* <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Page Title</h1> */}
-      <div>Versión 0.11</div>
+      <div>Versión 0.12</div>
       <img src={"./KFS_LOGO.jpg"} alt="" className="h-12" />
 
       {/* <div className="w-5 h-5" /> */}
@@ -41,3 +41,5 @@ function ArrowLeftIcon(props) {
     </svg>
   );
 }
+
+// home icon
