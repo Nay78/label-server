@@ -49,12 +49,6 @@ export async function action({ request }: ActionArgs) {
     // console.log("Command executed", command, response);
   }
 
-  // await new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve("Promise resolved");
-  //   }, 3000); // 10 seconds
-  // });
-
   // print labels
   const qty = body.get("qty");
   const printFilename = `${formFile}_${formDate}`;

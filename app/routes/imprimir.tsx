@@ -28,14 +28,17 @@ const dirpath = homeDirectory + "/Templates/Submitted";
 
 // Action to handle form submission
 export async function action({ request, params }: ActionFunctionArgs) {
-  const filepath = params.filepath;
-  console.log("DOCUMENTO::", filepath);
-  if (!filepath) return "FALTA PARAM FILEPATH";
+  const body = await request.formData();
+  const filepath = body.get("filepath") as string;
+  console.log("IMPRIMIENDO DOCUMENTO:", filepath);
+  if (!filepath) {
+    console.error("No filepath provided");
+    return "No filepath provided";
+  }
 
   setBusy(true);
   // Get the form data from the request
   let response = {};
-  const body = await request.formData();
   const qty = body.get("qty") || 1;
 
   sendMessage("Imprimiendo documento");
